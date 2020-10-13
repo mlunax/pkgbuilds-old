@@ -1,0 +1,23 @@
+pkgbase = notes
+	pkgdesc = Note taking application, write down your thoughts.
+	pkgver = 1.5.0
+	pkgrel = 1
+	url = https://github.com/nuttyartist/notes
+	arch = i686
+	arch = x86_64
+	license = MPL
+	makedepends = git
+	depends = qt5-base
+	provides = notes
+	conflicts = notes
+	source = notes::git+https://github.com/nuttyartist/notes#tag=v1.5.0
+	source = QSimpleUpdater::git+https://github.com/alex-spataru/QSimpleUpdater#commit=62567eee6631b64e09f365b7518b8744773d9b95
+	source = qautostart::git+https://github.com/b00f/qautostart#commit=5be8fea834979f04ed90c933f3557ea980d8dd24
+	source = qmarkdowntextedit::git+https://github.com/pbek/qmarkdowntextedit#commit=4f7ac9ede16e159499ef0178bee5b5a451e69a13
+	sha256sums = SKIP
+	sha256sums = SKIP
+	sha256sums = SKIP
+	sha256sums = SKIP
+
+pkgname = notes
+

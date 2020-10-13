@@ -1,0 +1,57 @@
+# Maintainer: Gökberk Yaltıraklı <webdosusb at gmail dot com>
+pkgname=notes
+pkgver=1.5.0
+pkgrel=1
+pkgdesc="Note taking application, write down your thoughts."
+arch=('i686' 'x86_64')
+url="https://github.com/nuttyartist/notes"
+license=('MPL')
+depends=('qt5-base')
+makedepends=('git')
+provides=('notes')
+conflicts=('notes')
+# source=($pkgname-$pkgver.tar.gz::"https://github.com/nuttyartist/notes/archive/v$pkgver.tar.gz")
+source=("$pkgname::git+$url#tag=v$pkgver"
+"QSimpleUpdater::git+https://github.com/alex-spataru/QSimpleUpdater#commit=62567eee6631b64e09f365b7518b8744773d9b95"
+"qautostart::git+https://github.com/b00f/qautostart#commit=5be8fea834979f04ed90c933f3557ea980d8dd24"
+"qmarkdowntextedit::git+https://github.com/pbek/qmarkdowntextedit#commit=4f7ac9ede16e159499ef0178bee5b5a451e69a13")
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+prepare() {
+  cd "$pkgname"
+  git submodule init
+  git config submodule.QSimpleUpdater.url "${srcdir}/3rdParty/QSimpleUpdater"
+  git config submodule.qautostart.url "${srcdir}/3rdParty/qautostart"
+  git config submodule.qmarkdowntextedit.url "${srcdir}/3rdParty/qmarkdowntextedit"
+  git submodule update
+}
+
+build() {
+  cd "${srcdir}/${pkgname}"
+
+  cat > $pkgname.desktop << EOF
+[Desktop Entry]
+Version=${pkgver}
+Type=Application
+Terminal=false
+StartupNotify=true
+Name=Notes
+Comment=$pkgdesc
+Categories=Utility;Application;
+Exec=/usr/bin/${pkgname}
+Icon=/usr/share/pixmaps/${pkgname}_icon.ico
+EOF
+
+  mkdir build
+  cd build
+  qmake ../src
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+  install -Dm755 build/notes $pkgdir/usr/bin/$pkgname
+  install -Dm644 src/images/notes_icon.ico $pkgdir/usr/share/pixmaps/${pkgname}_icon.ico
+  install -Dm644 $pkgname.desktop $pkgdir/usr/share/applications/$pkgname.desktop
+  install -Dm644 LICENSE $pkgdir/usr/share/licenses/$pkgname/LICENSE
+}
